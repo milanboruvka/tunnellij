@@ -1,0 +1,6 @@
+Okep:
+
+kdyz se dela invokace na server, server shodim, tunnel napise ze se nemuze naconnectit 
+na localhost:6060 a potom se dostane do pastavu, ze se musi vypnout zapnout aby
+zacal fungovat
+

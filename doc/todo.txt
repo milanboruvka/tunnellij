@@ -1,0 +1,17 @@
+bugs
+----
+- input verifier does not work
+- what about when running two projects in two windows?
+
+enh
+---
+- default and last values
+- save to file
+- http sender
+- ve WSDLku menit service address
+- show in binary format
+- save into binary files
+- save last used values
+- delete selected calls
+- format text shown in the list
+- popup menu for copying using mouse from viewers

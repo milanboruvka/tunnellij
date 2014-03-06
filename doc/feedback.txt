@@ -1,0 +1,70 @@
+What about having the getter line from the datailed view in the list view.
+That is: Wed May 28 09:08:13 CEST 2003, from localhost:4444 to ****, output... etc
+
+Becomes: GET /s.gif HTTP/1.1, from localhost:44444 to ***, output... etc
+
+This information would quickly give me an overview over which get operation I want to see. All the getting of gifs and jpegs could then be avoided.
+
+It could also be cool to be able to select multiple lines to delete with the new overview to quickly delete all gifs.
+
+Besides that - great plugin -- AndersHolmbechNielsen - 28 May 2003
+
+
+
+--------------------------------------------------------------------------------
+
+Anders' suggestion would only work for http based protocols - especially the filtering part. On my wishlist would be
+
+A configurable format string for the header line. Normally,
+I don't really care about the date part of the time stamp or the hostnames & port numbers,
+but would much rather see e.g. the first 30 characters of the request or reply.
+The format string could be a MessageFormat? string with a documented list of available
+values. E.g.
+
+0  Time of message - use {0,time} or {0,date}
+1  Length of request
+2  Length of reply
+3  Local host name
+4  Local port
+5  remote host name
+6  remote port
+7  First 50 chars of request
+8  First 50 chars of response
+9  size of request
+10  size of response
+11  time elapsed in ms
+
+
+a binary/text switch for messages, so that I could inspect binary messages going back & forth - e.g. for RMI calls.
+But I agree - great plugin!
+
+-- NielsUll - 30 May 2003
+
+
+
+--------------------------------------------------------------------------------
+
+Thanks guys VERY MUCH for your feedback! I will certainly include your notices into the design of the next version...
+
+
+MilanBoruvka
+
+
+Looking forward for your feedback
+
+-- MilanBoruvka - 26 May 2003
+
+
+
+
+--------------------------------------------------------------------------------
+
+i would be very nice to have a possibility to view binary output  i develop custom jdbc-driver and this plugin would be very useful. best wishes
+
+Jarek Krochmalski
+
+WebForm
+TopicClassification: IntelliJPluginDevelopment
+TopicShortDescription: TunnelliJPlugin development
+
+

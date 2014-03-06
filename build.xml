@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="tunnellij" basedir="." default="build">
+
+	<property file="${basedir}/build.properties" />
+	<property name="path.src" value="${basedir}/src/" />
+	<property name="path.doc" value="${basedir}/doc/" />
+	<property name="path.build" value="${basedir}/build/" />
+	<property name="path.build.classes" value="${path.build}classes/" />
+	<property name="path.build.to_jar" value="${path.build}to_jar/" />
+	<property name="path.build.jar" value="${path.build}tunnellij_${tunnellij.version}.jar" />
+
+	<property name="path.idea.home" value="C:/java/idea6913" />
+	<property name="path.jre.home" value="C:/java/jdk1.5.0_11/jre" />
+
+	<property name="path.idea.installed.jar" value="${path.idea.home}/plugins/tunnellij_${tunnellij.version}.jar" />
+
+	<path id="path.source">
+		<pathelement location="${path.src}" />
+	</path>
+
+	<path id="path.class">
+		<pathelement location="${path.jre.home}/lib/charsets.jar" />
+		<pathelement location="${path.jre.home}/lib/jaws.jar" />
+		<pathelement location="${path.jre.home}/lib/jce.jar" />
+		<pathelement location="${path.jre.home}/lib/jsse.jar" />
+		<pathelement location="${path.jre.home}/lib/sunrsasign.jar" />
+		<pathelement location="${path.jre.home}/lib/ext/dnsns.jar" />
+		<pathelement location="${path.jre.home}/lib/ext/ldapsec.jar" />
+		<pathelement location="${path.jre.home}/lib/ext/localedata.jar" />
+		<pathelement location="${path.jre.home}/lib/ext/sunjce_provider.jar" />
+		<pathelement location="${path.idea.home}/lib/openapi.jar" />
+	</path>
+
+	<target name="init">
+		<tstamp />
+		<echo>Starting build the distribution of Tunnellij ${tunnellij.version}</echo>
+
+		<mkdir dir="${path.build.to_jar}" />
+		<mkdir dir="${path.build.classes}" />
+
+	</target>
+
+	<target name="compile" depends="init" description="Compiles sources">
+		<javac target="1.5" sourcepathref="path.source" classpathref="path.class" destdir="${path.build.classes}" debug="on" deprecation="on">
+			<src refid="path.source" />
+		</javac>
+	</target>
+
+	<target name="build" depends="compile" description="Rebuilds project" />
+
+	<target name="jar" depends="compile" description="jar the classes dirs">
+
+		<echo>Copying classes...</echo>
+		<copy todir="${path.build.to_jar}">
+			<fileset dir="${path.build.classes}" includes="**/*.*" excludes="**/.dependency-info/**" />
+		</copy>
+
+		<echo>Copying other files...</echo>
+		<copy todir="${path.build.to_jar}">
+			<fileset dir="${path.src}" includes="**/*.properties" />
+			<fileset dir="${path.src}" includes="**/*.xml" />
+			<fileset dir="${path.src}" includes="**/*.png" />
+			<fileset dir="${path.doc}" includes="readme.txt" />
+		</copy>
+
+		<replace file="${path.build.to_jar}net/boruvka/idea/tunnellij/TunnelPlugin.properties">
+			<replacefilter token="$TUNNELLIJ_VERSION$" value="${tunnellij.version}" />
+		</replace>
+
+		<replace file="${path.build.to_jar}META-INF/plugin.xml">
+			<replacefilter token="$TUNNELLIJ_VERSION$" value="${tunnellij.version}" />
+		</replace>
+
+		<replace file="${path.build.to_jar}readme.txt">
+			<replacefilter token="$TUNNELLIJ_VERSION$" value="${tunnellij.version}" />
+		</replace>
+
+		<echo>Creating jar...</echo>
+		<jar destfile="${path.build.jar}" basedir="${path.build.to_jar}" excludes="**/.dependency-info/**">
+		</jar>
+
+	</target>
+
+	<target name="clean" depends="init" description="Removes classses and javadoc">
+		<delete dir="${path.build}" />
+	</target>
+
+	<target name="install to idea" depends="" description="installs it to idea">
+		<jar jarfile="${path.idea.installed.jar}" basedir="${path.build.to_jar}" excludes="**/.dependency-info/**" update="true" />
+	</target>
+
+</project>
+
