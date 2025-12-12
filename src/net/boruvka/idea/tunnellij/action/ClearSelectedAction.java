@@ -19,8 +19,11 @@ public class ClearSelectedAction extends AnAction {
     }
 
     public void actionPerformed(AnActionEvent event) {
-        Project project = (Project) event.getDataContext().getData("project");
+        Project project = event.getProject();
+        if (project == null) return;
         TunnelPanel tunnelPanel = TunnelPlugin.getTunnelPanel(project);
-        tunnelPanel.clearSelected();
+        if (tunnelPanel != null) {
+            tunnelPanel.clearSelected();
+        }
     }
 }

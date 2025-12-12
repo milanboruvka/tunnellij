@@ -21,7 +21,8 @@ public class StopAction extends AnAction {
     }
 
     public void actionPerformed(AnActionEvent event) {
-        Project project = (Project) event.getDataContext().getData("project");
+        Project project = event.getProject();
+        if (project == null) return;
         TunnelPanel tunnelPanel = TunnelPlugin.getTunnelPanel(project);
         try {
             tunnelPanel.stop();
@@ -33,10 +34,14 @@ public class StopAction extends AnAction {
     }
 
     public void update(AnActionEvent event) {
-        Project project = (Project) event.getDataContext().getData("project");
-        TunnelPanel tunnelPanel = TunnelPlugin.getTunnelPanel(project);
+        Project project = event.getProject();
         Presentation p = event.getPresentation();
-        p.setEnabled(tunnelPanel.isRunning());
+        if (project == null) {
+            p.setEnabled(false);
+            return;
+        }
+        TunnelPanel tunnelPanel = TunnelPlugin.getTunnelPanel(project);
+        p.setEnabled(tunnelPanel != null && tunnelPanel.isRunning());
         p.setVisible(true);
     }
 
