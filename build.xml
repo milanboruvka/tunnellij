@@ -9,8 +9,8 @@
 	<property name="path.build.to_jar" value="${path.build}to_jar/" />
 	<property name="path.build.jar" value="${path.build}tunnellij_${tunnellij.version}.jar" />
 
-	<property name="path.idea.home" value="C:/java/idea6913" />
-	<property name="path.jre.home" value="C:/java/jdk1.5.0_11/jre" />
+	<property name="path.idea.home" value="/Applications/IntelliJ IDEA CE.app/Contents" />
+	<property name="path.jre.home" value="${java.home}" />
 
 	<property name="path.idea.installed.jar" value="${path.idea.home}/plugins/tunnellij_${tunnellij.version}.jar" />
 
@@ -19,16 +19,9 @@
 	</path>
 
 	<path id="path.class">
-		<pathelement location="${path.jre.home}/lib/charsets.jar" />
-		<pathelement location="${path.jre.home}/lib/jaws.jar" />
-		<pathelement location="${path.jre.home}/lib/jce.jar" />
-		<pathelement location="${path.jre.home}/lib/jsse.jar" />
-		<pathelement location="${path.jre.home}/lib/sunrsasign.jar" />
-		<pathelement location="${path.jre.home}/lib/ext/dnsns.jar" />
-		<pathelement location="${path.jre.home}/lib/ext/ldapsec.jar" />
-		<pathelement location="${path.jre.home}/lib/ext/localedata.jar" />
-		<pathelement location="${path.jre.home}/lib/ext/sunjce_provider.jar" />
-		<pathelement location="${path.idea.home}/lib/openapi.jar" />
+		<fileset dir="${path.idea.home}/lib">
+			<include name="*.jar" />
+		</fileset>
 	</path>
 
 	<target name="init">
@@ -41,7 +34,7 @@
 	</target>
 
 	<target name="compile" depends="init" description="Compiles sources">
-		<javac target="1.5" sourcepathref="path.source" classpathref="path.class" destdir="${path.build.classes}" debug="on" deprecation="on">
+		<javac target="17" source="17" sourcepathref="path.source" classpathref="path.class" destdir="${path.build.classes}" debug="on" deprecation="on">
 			<src refid="path.source" />
 		</javac>
 	</target>

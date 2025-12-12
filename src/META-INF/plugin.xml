@@ -1,30 +1,34 @@
 <idea-plugin url="http://www.boruvka.net">
-	
+
 	<name>TunnelliJ</name>
-	
-	<id>TunnelliJ</id>	
+
+	<id>TunnelliJ</id>
 
 	<description>
 		TunnelliJ plugin works as a TCP tunnel and it useful for any network development.
-		It allows you to monitor, sniff TCP connections and display the content in a very 
+		It allows you to monitor, sniff TCP connections and display the content in a very
 		effective way inside your IDE.
 	</description>
-	
+
 	<version>$TUNNELLIJ_VERSION$</version>
-	
+
 	<vendor email="milan.boruvka@gmail.com" url="http://blog.boruvka.net">Milan Boruvka</vendor>
-	
-	<idea-version since-build="3000"/>
-	
-	<change-notes>repackaged for Idea 13.x</change-notes>
-	
+
+	<idea-version since-build="223"/>
+
+	<change-notes>Updated for modern IntelliJ platform</change-notes>
+
 	<category>network</category>
-	
-	<project-components>
-		<component>
-			<implementation-class>net.boruvka.idea.tunnellij.TunnelPlugin</implementation-class>
-			<interface-class>net.boruvka.idea.tunnellij.TunnelPlugin</interface-class>
-		</component>
-	</project-components>
-	
+
+	<depends>com.intellij.modules.platform</depends>
+
+	<extensions defaultExtensionNs="com.intellij">
+		<toolWindow id="TunnelliJ"
+					anchor="bottom"
+					icon="/icons/tunnellij.png"
+					factoryClass="net.boruvka.idea.tunnellij.TunnelToolWindowFactory"/>
+		<applicationService
+					serviceImplementation="net.boruvka.idea.tunnellij.TunnelPlugin"/>
+	</extensions>
+
 </idea-plugin>

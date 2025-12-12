@@ -1,6 +1,5 @@
 package net.boruvka.idea.tunnellij;
 
-import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,80 +7,42 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
-import javax.swing.UIManager;
-
-import net.boruvka.idea.tunnellij.action.AboutAction;
-import net.boruvka.idea.tunnellij.action.ClearAction;
-import net.boruvka.idea.tunnellij.action.ClearSelectedAction;
-import net.boruvka.idea.tunnellij.action.StartAction;
-import net.boruvka.idea.tunnellij.action.StopAction;
-import net.boruvka.idea.tunnellij.action.WrapAction;
-import net.boruvka.idea.tunnellij.ui.Icons;
 import net.boruvka.idea.tunnellij.ui.TunnelPanel;
 
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.openapi.Disposable;
 
 /**
  * @author boruvka
- * @since
  */
-public class TunnelPlugin implements ProjectComponent {
+@Service
+public final class TunnelPlugin implements Disposable {
 
-    private static TunnelPanel tunnelPanel;
+    private static final Map<Project, TunnelPanel> tunnelPanels = new ConcurrentHashMap<>();
 
-    public static Properties PROPERTIES;
+    public static Properties PROPERTIES = new Properties();
 
     private static final String PROPERTIES_FILE_NAME = "tunnellij.properties";
 
-    private static File PROPERTIES_FILE;
+    private static final File PROPERTIES_FILE = new File(System.getProperty("user.home"),
+            PROPERTIES_FILE_NAME);
 
-    private static final String COMPONENT_NAME = "net.boruvka.idea.tunnellij.TunnelWindow";
-
-    private static final String TOOL_WINDOW_ID = TunnelBundle.getBundle()
-            .getString("TunnelliJ.version");
-
-    static {
-        PROPERTIES_FILE = new File(System.getProperty("user.home"),
-                PROPERTIES_FILE_NAME);
-        PROPERTIES = new Properties();
+    public static TunnelPlugin getInstance() {
+        return ApplicationManager.getApplication().getService(TunnelPlugin.class);
     }
 
-    private ToolWindow tunnelWindow;
-
-    private Project project;
-
-    public TunnelPlugin(Project project) {
-        this.project = project;
-    }
-
-    public void projectOpened() {
-        initToolWindow();
-    }
-
-    public void projectClosed() {
-        unregisterToolWindow();
-    }
-
-    public String getComponentName() {
-        return COMPONENT_NAME;
-    }
-
-    public synchronized void initComponent() {
+    public void loadProperties() {
         if (PROPERTIES_FILE.exists()) {
             try {
                 InputStream is = new FileInputStream(PROPERTIES_FILE);
                 PROPERTIES.load(is);
+                is.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -90,65 +51,23 @@ public class TunnelPlugin implements ProjectComponent {
         }
     }
 
-    public synchronized void disposeComponent() {
+    @Override
+    public void dispose() {
         try {
             OutputStream os = new FileOutputStream(PROPERTIES_FILE);
             PROPERTIES.store(os, "TunnelliJ plugin");
+            os.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void initToolWindow() {
-
-        ToolWindowManager toolWindowManager = ToolWindowManager
-                .getInstance(project);
-        tunnelPanel = createTunnelPanel();
-        tunnelWindow = toolWindowManager.registerToolWindow(TOOL_WINDOW_ID,
-                tunnelPanel, ToolWindowAnchor.BOTTOM);
-        tunnelWindow.setIcon(Icons.ICON_WATCH);
-
-        DefaultActionGroup actionGroup = initToolbarActionGroup();
-        ActionToolbar toolBar = ActionManager.getInstance()
-                .createActionToolbar("tunnellij.Toolbar", actionGroup, false);
-
-        tunnelPanel.add(toolBar.getComponent(), BorderLayout.WEST);
-    }
-
-    private void unregisterToolWindow() {
-        ToolWindowManager toolWindowManager = ToolWindowManager
-                .getInstance(project);
-        toolWindowManager.unregisterToolWindow(TOOL_WINDOW_ID);
-    }
-
-    private static TunnelPanel createTunnelPanel() {
-        TunnelPanel panel = new TunnelPanel();
-        panel.setBackground(UIManager.getColor("Tree.textBackground"));
-        return panel;
-    }
-
-    private DefaultActionGroup initToolbarActionGroup() {
-        DefaultActionGroup actionGroup = new DefaultActionGroup();
-
-        AnAction startAction = new StartAction();
-        AnAction stopAction = new StopAction();
-        AnAction clearAction = new ClearAction();
-        AnAction clearSelectedAction = new ClearSelectedAction();
-        AnAction aboutAction = new AboutAction();
-        ToggleAction wrapAction = new WrapAction();
-
-        actionGroup.add(startAction);
-        actionGroup.add(stopAction);
-        actionGroup.add(clearSelectedAction);
-        actionGroup.add(clearAction);
-        actionGroup.add(wrapAction);
-        actionGroup.add(aboutAction);
-
-        return actionGroup;
+    public static void setTunnelPanel(Project project, TunnelPanel panel) {
+        tunnelPanels.put(project, panel);
     }
 
     public static TunnelPanel getTunnelPanel(Project project) {
-        return tunnelPanel;
+        return tunnelPanels.get(project);
     }
 
     public static class TunnelConfig {

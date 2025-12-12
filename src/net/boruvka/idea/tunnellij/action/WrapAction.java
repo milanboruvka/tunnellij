@@ -27,8 +27,10 @@ public class WrapAction extends ToggleAction {
     public void setSelected(AnActionEvent event, boolean b) {
         selected = b;
 
-        Project project = (Project) event.getDataContext().getData("project");
+        Project project = event.getProject();
+        if (project == null) return;
         TunnelPanel tunnelPanel = TunnelPlugin.getTunnelPanel(project);
+        if (tunnelPanel == null) return;
 
         if (selected)
             tunnelPanel.wrap();
