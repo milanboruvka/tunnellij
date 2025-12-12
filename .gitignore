@@ -1,5 +1,6 @@
 *.class
-tunnellij.iws
+*.ipr
+*.iws
 
 # Package Files #
 *.jar
