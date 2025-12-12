@@ -2,6 +2,8 @@
 
 A TCP tunnel and network traffic sniffer plugin for JetBrains IntelliJ IDEA.
 
+Note: I wrote this plugin in 2004 and I am quite amazed that after small revamp (thanks Claude Code) it still works fine!
+
 ## Description
 
 TunnelliJ allows you to monitor and analyze network traffic between client and server applications directly within your IDE. It's useful for debugging web applications, web services, and any TCP-based communication.
