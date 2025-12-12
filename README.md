@@ -2,7 +2,7 @@
 
 A TCP tunnel and network traffic sniffer plugin for JetBrains IntelliJ IDEA.
 
-Note: I wrote this plugin in 2004 and I am quite amazed that after small revamp (thanks Claude Code) it still works fine!
+_Note: I wrote this plugin in 2004 and I am quite amazed that after small revamp (thanks Claude Code) it still works fine!_
 
 ## Description
 
@@ -45,7 +45,7 @@ The plugin JAR will be created in the `build/` directory.
 
 **Milan Boruvka**
 - Email: milan.boruvka@gmail.com
-- Website: http://blog.boruvka.net
+- Website: http://www.boruvka.net
 
 ## License
 
