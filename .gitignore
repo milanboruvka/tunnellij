@@ -1,12 +1,9 @@
 *.class
 *.ipr
 *.iws
-
-# Package Files #
 *.jar
-*.war
-*.ear
 build
+target
 .classpath
 .project
 
